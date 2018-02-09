@@ -1,0 +1,3 @@
+banana;2
+cola;1.5
+balloon;0.1

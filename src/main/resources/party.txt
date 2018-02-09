@@ -1,0 +1,16 @@
+birthday;cake
+birthday;balloon
+birthday;cola
+birthday;icecream
+birthday;banana
+corporate;wine
+corporate;coffee
+corporate;fish
+garden;fish
+garden;wine
+garden;icecream
+garden;banana
+cocktail;wine
+cocktail;icecream
+cocktail;banana
+cocktail;martini

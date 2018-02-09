@@ -1,0 +1,8 @@
+banana;2
+cola;1.5
+balloon;0.1
+cake;100
+icecream;1.5
+wine;2
+coffee;1
+martini;10

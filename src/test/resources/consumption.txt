@@ -1,0 +1,3 @@
+banana;0.2
+cake;0.01
+cola;1
