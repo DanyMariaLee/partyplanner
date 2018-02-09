@@ -70,4 +70,44 @@ You can also run all tests in the project by typing
 test
 ```
 
+#Everything done?
+So fast?
+Ok!
+We have more for you)
+
+1) What if party can be for kids? pets?
+- take new resources/additional/consumption.txt file and replace old consumption.txt in resources folder with that. Two new columns contain info for kids and pets respectively.
+- expand Consumption model to fit new informaion
+- don't forget to add new questions into chat with user
+- write more tests!
+2) Create a REST API with existing functionality.
+- get Request model as input in your app, and respond with Receipt model. 
+- Request to your app in json will be like this
+```json
+{
+   "party": {
+       "name": "birthday",
+       "products": ["apple","coffee"]
+   },
+   "numberOfPeople": 10,
+   "budget": 100
+}
+```
+- And your response will look like this
+```json
+{
+"request": {
+   "party": {
+       "name": "birthday",
+       "products": ["apple","coffee"]
+   },
+   "numberOfPeople": 10,
+   "budget": 100
+},
+"totalAmount": 99
+}
+```
+- there are a lot of frameworks to do that, the most popular is [Akka](https://doc.akka.io/docs/akka-http/current/introduction.html). You can find examples in internet, this is one of [apps](https://github.com/DanyMariaLee/scale), feel free to use it.
+3) Use external API data to get prices for products instead of price.txt. One of useful API can be [Tesco](https://devportal.tescolabs.com/docs/services/57f247f9e2813e07d8663943/operations/57f2518fe2813e07d8663945/console). Feel free to use any of the API you can find or even write your own that will get data from file price.txt and respond with json response containing that data.
+
 ### Have fun!
