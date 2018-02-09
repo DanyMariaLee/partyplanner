@@ -316,8 +316,7 @@ object PartyPlanner extends App {
 
     println("Hey there, it's a party planner app!\n" +
       "We are offering different types of parties:\n" +
-      partiesWeCanThrow +
-      "Please, pick the type of your party\n")
+      partiesWeCanThrow)
 
     ???
   }
