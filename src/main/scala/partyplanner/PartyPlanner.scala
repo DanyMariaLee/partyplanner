@@ -265,7 +265,7 @@ object PartyPlanner extends App {
    * Output: Option[Party]
    * */
   def getPartyType(availableParties: Map[Int, Party]): Option[Party] = {
-    println("Please, pick the type of your party")
+    println("\nPlease, pick the type of your party")
     ???
   }
 
