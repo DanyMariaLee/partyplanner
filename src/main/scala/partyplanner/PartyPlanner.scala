@@ -1,9 +1,14 @@
 package partyplanner
 
+import java.text.SimpleDateFormat
+
 import partyplanner.domain.{Consumption, Party, Price}
 import partyplanner.input.Request
 import partyplanner.output.Receipt
+import partyplanner.exception.PartyPlannerException
 import utils.Utils.loadDataFromFile
+import java.util.Calendar
+import scala.util.Try
 
 object PartyPlanner extends App {
 
@@ -34,7 +39,13 @@ object PartyPlanner extends App {
     *
     *         price should be Price("apple", 1.5)
     */
-  def parsePrices: List[Price] = ???
+  def parsePrices : List[Price] = {
+    loadDataFromFile("/price.txt").map{ e =>  //List("apple;2", "coffee;3)
+      //e  apple;2
+        val arr = e.split(";") //Array("apple", "2")
+        Price(arr(0), arr(1).toDouble)
+    }
+  }
 
   /**
     * @return List[Consumption] containing consumptions from file in resource
@@ -44,7 +55,13 @@ object PartyPlanner extends App {
     *
     *         consumption should be Consumption("apple", 0.5)
     */
-  def parseConsumptions: List[Consumption] = ???
+  def parseConsumptions: List[Consumption] = {
+    loadDataFromFile("/consumption.txt").map{ e =>
+      val arr = e.split(";")
+      Consumption(arr(0),arr(1).toDouble)
+
+    }
+  }
 
   /**
     * @return List[Party] containing Party from file in resource
@@ -55,7 +72,20 @@ object PartyPlanner extends App {
     *
     *         party should be Party("birthday", List("coffee", "cola"))
     */
-  def parseParties: List[Party] = ???
+  def parseParties: List[Party] = {
+    loadDataFromFile("/party.txt").map { e => //List("birthday;cake", "birthday;balloon", "garden;fish")
+      // e = birthday;cake
+      val arr = e.split(";") //Arrray("birthday","cake")
+      (arr(0), arr(1)) // ("birthday", "cake")
+    }.groupBy(_._1) // Map(birthday -> List((birthday,cake), (birthday,balloon)), corporate -> List((corporate,coffee), (corporate,fish)))
+      .map {
+      case (partyName, values) =>
+        val products = values.map(e => e._2) // List("cake", "cole")
+        Party(partyName, products)
+    }.toList //List(Party(birthday,List(cake, balloon)), Party(corporate,List(coffee, fish)))
+
+  }
+
 
   /**
     * Let's run some tests!
@@ -87,7 +117,14 @@ object PartyPlanner extends App {
     *         1 -> Party("party2", List("product2"))
     *         )
     */
-  def getAvailableParties(parties: List[Party]) = ???
+  def getAvailableParties(parties: List[Party]): Map[Int, Party] = {
+
+    parties.zipWithIndex // List(P1, P2).zipWithIndex = List((P1, 0),(P2,1))
+      .map{case (party, counter) =>
+      (counter, party)
+    }.toMap  // List("birthday", List("banana", "apple", "cake")).zipWithIndex
+
+  }
 
   /*
    * step 1. Calculate amount to spend for one person for one product.
@@ -106,7 +143,16 @@ object PartyPlanner extends App {
    *    returns PartyPlannerException("Price or consumption can't be less than zero")
    *
    * */
-  def oneProductAmount(p: Price, c: Consumption): Double = ???
+  @throws[PartyPlannerException]
+  def oneProductAmount(p: Price, c: Consumption): Double = {
+    if (p.product != c.product) {
+      throw new PartyPlannerException("Price and consumption should be for same product")
+    } else if (p.value <= 0 || c.value <= 0) {
+      throw new PartyPlannerException("Price or consumption can't be less than zero")
+    } else {
+      p.value * c.value
+    }
+  }
 
   /*
    * step 2. Calculate amount to spend for one person for all products in the party product list.
@@ -134,8 +180,15 @@ object PartyPlanner extends App {
    * */
   def totalOnePerson(party: Party,
                      prices: List[Price],
-                     consumptions: List[Consumption]): Double = ???
+                     consumptions: List[Consumption]): Double = {
+    val total = (prices zip consumptions).map{
+      case (price, consumption) => {
+          oneProductAmount(price, consumption)
 
+      }
+    }
+   total.sum
+  }
   /*
    * step 3. Calculate total for all people for this party
    *
@@ -153,7 +206,9 @@ object PartyPlanner extends App {
    *
    * If you have any questions ask for help =)
    * */
-  def totalAmount(totalOnePerson: Double, numberOfPeople: Int): Double = ???
+  def totalAmount(totalOnePerson: Double, numberOfPeople: Int): Double = {
+    totalOnePerson * numberOfPeople
+  }
 
   /*
    * RECEIPT
@@ -170,7 +225,11 @@ object PartyPlanner extends App {
    *
    * sf.format(todayDate)
    * */
-  def todayDate: String = ???
+  def todayDate: String = {
+    val todayDate = Calendar.getInstance().getTime
+    val simpleFormat = new SimpleDateFormat("dd MMM yyyy")
+    simpleFormat.format(todayDate)
+  }
 
   /*
    * step 2. Create a string to print for your client, with all information about the order.
@@ -235,6 +294,7 @@ object PartyPlanner extends App {
   * */
   def getNumberOfPeople: Option[Int] = {
     println("How many people will be at the party?")
+    Try(scala.io.StdIn.readInt()).toOption
     ???
   }
 
@@ -246,7 +306,7 @@ object PartyPlanner extends App {
    * */
   def getBudget: Option[Double] = {
     println("What is your budget for this party?")
-    ???
+    Try(scala.io.StdIn.readDouble()).toOption
   }
 
   /*
