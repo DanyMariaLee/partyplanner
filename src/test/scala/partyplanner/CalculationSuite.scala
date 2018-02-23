@@ -48,26 +48,20 @@ class CalculationSuite extends TestUtil {
   }
 
   test("totalOnePerson") {
-    val party1 = Party("Party", List("banana", "cola"))
-    val party2 = Party("Party", List("coffee", "cola"))
-
+    val party = Party("Party1", List("apple", "coffee"))
     val prices = List(
-      Price("coffee", 10),
-      Price("cola", 5),
-      Price("something else", 2)
+      Price("apple", 2),
+      Price("other", 3),
+      Price("coffee", 4)
     )
 
     val consumptions = List(
-      Consumption("coffee", 3),
-      Consumption("cola", 2),
-      Consumption("something else", 10)
+      Consumption("apple", 0.1),
+      Consumption("coffee", 0.2),
+      Consumption("cola", 0.3)
     )
 
-    assert(totalOnePerson(party2, prices, consumptions) == 40)
-
-    assertThrows[PartyPlannerException](
-      totalOnePerson(party1, prices, consumptions)
-    )
+    assert(totalOnePerson(party, prices, consumptions) == 1.0)
 
     light = 1
   }
