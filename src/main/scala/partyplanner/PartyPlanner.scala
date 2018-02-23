@@ -181,14 +181,21 @@ object PartyPlanner extends App {
   def totalOnePerson(party: Party,
                      prices: List[Price],
                      consumptions: List[Consumption]): Double = {
-    val total = (prices zip consumptions).map{
-      case (price, consumption) => {
-          oneProductAmount(price, consumption)
+    var total : Double = 0
+    for (product <- party.products) {
+      for (price <- prices) {
+        for (consumption <- consumptions) {
+          if (product == consumption.product && product == price.product) {
+            //println(s"The product is $product and the price is $price and consumption is $consumption")
+            total += oneProductAmount(price, consumption)
+          }
 
+        }
       }
     }
-   total.sum
+    total
   }
+
   /*
    * step 3. Calculate total for all people for this party
    *
