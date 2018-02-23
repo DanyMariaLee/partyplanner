@@ -66,7 +66,6 @@ class CalculationSuite extends TestUtil {
     light = 1
   }
 
-
   test("totalAmount") {
     assert(totalAmount(2, 100) == 200)
     assert(totalAmount(22, 5) == 110)
