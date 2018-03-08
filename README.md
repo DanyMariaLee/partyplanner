@@ -5,6 +5,7 @@
 Hey there!
 
 If you want to learn Scala from scratch this workshop will help you out with that.
+(here is the presentation with Task to help you out https://www.slideshare.net/MarinaSigaeva/party-planner-workshop)
 
 What we have:
 1) build.sbt - file with all information about application:
